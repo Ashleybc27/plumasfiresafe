@@ -1,8 +1,8 @@
-setwd("~/Desktop")
+setwd("~/Documents/GitHub/plumasfiresafe")
 
-treedata <- read.csv("Plumas_TreeData_Masterspreadsheet_2023.csv")
+treedata <- read.csv("AllTrees.csv")
 treedata
-
+head(treedata)
 treedata$Species13 <- treedata$X2013.FIA.Species.Code
 treedata$Species13[treedata$Species13=="117"] <- "SP"
 treedata$Species13[treedata$Species13=="81"] <- "IC"
@@ -52,69 +52,70 @@ treedata <- read.csv("AllTrees.csv")
 
 abovegroundbiomass <- function(treedata="AllTrees.csv"){  
   treetable <- read.csv(treedata)
-  outtable <- c() 
+  #outtable <- c() 
   for (i in seq(treetable$Species13)) {
     if (treetable$Species13[[i]] == "SP") {
-      biomass13 <-  exp(-3.984 + 2.667*(log(treetable$X2013.DBH[[i]])))
+      biomass <-  exp(-3.984 + 2.667*(log(treetable$X2013.DBH[[i]])))
       + exp(-5.295 + 2.619*(log(treetable$X2013.DBH[[i]])))
       + exp(-7.637 + 3.365*(log(treetable$X2013.DBH[[i]])))
       + exp(-5.413 + 2.127*(log(treetable$X2013.DBH[[i]])))
       + exp(-4.023 + 2.032*(log(treetable$X2013.DBH[[i]])))
-      outtable <- c(outtable,biomass13)
+      treetable$Biomass_kg13[[i]] <- biomass
     }
     if (treetable$Species13[[i]] == "JP") {
-      biomass13 <- (1.0469 * exp(-4.1279 + log(treetable$X2013.DBH[[i]]) * 2.7039))
+      biomass <- (1.0469 * exp(-4.1279 + log(treetable$X2013.DBH[[i]]) * 2.7039))
       + (1.0304 * exp(-4.2291 + log(treetable$X2013.DBH[[i]]) * 2.2691))
       + (1.0425 * exp(-6.0278 + log(treetable$X2013.DBH[[i]]) * 2.8655))
       + (1.1322 * exp(-5.3589 + log(treetable$X2013.DBH[[i]]) * 2.2500))
       + (1.0672 * exp(-4.1317 + log(treetable$X2013.DBH[[i]]) * 2.0159))
-      outtable <- c(outtable,biomass13)
+      treetable$Biomass_kg13[[i]] <- biomass
     }
     if (treetable$Species13[[i]] == "IC") {
-      biomass13 <- exp(-2.656 + 2.53*(log(treetable$X2013.DBH[[i]])))
+      biomass <- exp(-2.656 + 2.53*(log(treetable$X2013.DBH[[i]])))
       + exp(-4.108 + 2.39*(log(treetable$X2013.DBH[[i]])))
       + exp(-4.786 + 2.389*(log(treetable$X2013.DBH[[i]])))
       + exp(-2.455 + 1.4*(log(treetable$X2013.DBH[[i]])))
       + exp(-4.151 + 1.982*(log(treetable$X2013.DBH[[i]])))
-      outtable <- c(outtable,biomass13) #just used DF calcs for now...
+      treetable$Biomass_kg13[[i]] <- biomass #just used DF calcs for now...
     }
     if (treetable$Species13[[i]] == "WF") {
-      biomass13 <- exp(4.36982 + 2.5043 *(log(treetable$X2013.DBH[[i]])))/1000
-      outtable <- c(outtable,biomass13)
+      biomass <- exp(4.36982 + 2.5043 *(log(treetable$X2013.DBH[[i]])))/1000
+      treetable$Biomass_kg13[[i]] <- biomass
     }
     if (treetable$Species13[[i]] == "PP") {
-      biomass13 <- (1.0469 * exp(-4.1279 + log(treetable$X2013.DBH[[i]]) * 2.7039))
+      biomass <- (1.0469 * exp(-4.1279 + log(treetable$X2013.DBH[[i]]) * 2.7039))
       + (1.0304 * exp(-4.2291 + log(treetable$X2013.DBH[[i]]) * 2.2691))
       + (1.0425 * exp(-6.0278 + log(treetable$X2013.DBH[[i]]) * 2.8655))
       + (1.1322 * exp(-5.3589 + log(treetable$X2013.DBH[[i]]) * 2.2500))
       + (1.0672 * exp(-4.1317 + log(treetable$X2013.DBH[[i]]) * 2.0159))
-      outtable <- c(outtable,biomass13)
+      treetable$Biomass_kg13[[i]] <- biomass
     }
     if (treetable$Species13[[i]] =="DF") {
-      biomass13 <- exp(-2.656 + 2.53*(log(treetable$X2013.DBH[[i]])))
+      biomass <- exp(-2.656 + 2.53*(log(treetable$X2013.DBH[[i]])))
       + exp(-4.108 + 2.39*(log(treetable$X2013.DBH[[i]])))
       + exp(-4.786 + 2.389*(log(treetable$X2013.DBH[[i]])))
       + exp(-2.455 + 1.4*(log(treetable$X2013.DBH[[i]])))
       + exp(-4.151 + 1.982*(log(treetable$X2013.DBH[[i]])))
-      outtable <- c(outtable,biomass13)
+      treetable$Biomass_kg13[[i]] <- biomass
     }
     if (treetable$Species13[[i]] == "BO" & treetable$X2013.DBH[[i]] >= 11) {
-      biomass13 <- (0.0629*((treetable$X2013.DBH[[i]]^2)^1.19522)*treetable$X2013.Height[[i]]^1.00554)/2.205
-      outtable <- c(outtable,biomass13)
+      biomass <- (0.0629*((treetable$X2013.DBH[[i]]^2)^1.19522)*treetable$X2013.Height[[i]]^1.00554)/2.205
+      treetable$Biomass_kg13[[i]] <- biomass
     }
     if (treetable$Species13[[i]] == "BO" & treetable$X2013.DBH[[i]] < 11) {
-      biomass13 <- (0.15621*((treetable$X2013.DBH[[i]]^2)*treetable$X2013.Height[[i]])*1.00554)/2.205 
-      outtable <- c(outtable,biomass13)
+      biomass <- (0.15621*((treetable$X2013.DBH[[i]]^2)*treetable$X2013.Height[[i]])*1.00554)/2.205 
+      treetable$Biomass_kg13[[i]] <- biomass
     }
+
     
   }
-  treetable$Biomass_kg13=outtable
-  treetable <<- treetable
+  #treetable$Biomass_kg13=outtable
+  #treetable <<- treetable
   return(treetable)
 }
 
-abovegroundbiomass("AllTrees.csv")
-
+test <- abovegroundbiomass("AllTrees.csv")
+head(test)
 #export csv with biomass column
 write.csv(treetable, "~/Desktop/AllTrees.csv", row.names = FALSE)
 
